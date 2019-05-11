@@ -53,9 +53,13 @@
     "prepare-release": "One-step: clean, build, test, publish docs, and prep a release"
   },
   "peerDependencies": {
-    "react-native": "^0.57.2"
+    "react-native": "*"
+  },
+  "dependencies": {
+    "react-native": "*"
   },
   "devDependencies": {
+    "@types/react-native": "^0.57.55",
     "ava": "1.4.1",
     "codecov": "^3.4.0",
     "cz-conventional-changelog": "^2.1.0",
@@ -64,13 +68,13 @@
     "nyc": "^14.1.1",
     "opn-cli": "^4.1.0",
     "prettier": "^1.17.0",
+    "semantic-release": "^15.13.12",
     "trash-cli": "^1.4.0",
     "tslint": "^5.16.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-immutable": "^5.5.2",
     "typedoc": "^0.14.2",
-    "typescript": "^3.4.5",
-    "semantic-release": "^15.13.12"
+    "typescript": "^3.4.5"
   },
   "ava": {
     "failFast": true,
