@@ -29,8 +29,7 @@
     "doc:publish": "gh-pages -m \"[ci skip] Updates\" -d build/docs",
     "reset": "git clean -dfx && git reset --hard && npm i",
     "clean": "trash build test",
-    "all": "run-s reset test doc:html",
-    "semantic-release": "run-s all semantic-release doc:publish"
+    "semantic-release": "run-s reset build doc:html semantic-release doc:publish"
   },
   "scripts-info": {
     "info": "Display information about the package scripts",
@@ -41,7 +40,7 @@
     "doc:json": "Generate API documentation in typedoc JSON format",
     "version": "Bump package.json version, update CHANGELOG.md, tag release",
     "reset": "Delete all untracked files and reset the repo to the last commit",
-    "prepare-release": "One-step: clean, build, test, publish docs, and prep a release"
+    "semantic-release": "One-step: clean, build, test, publish docs, and prep a release"
   },
   "peerDependencies": {
     "react-native": "*"
@@ -60,7 +59,7 @@
     "tslint-config-prettier": "^1.18.0",
     "tslint-immutable": "^5.5.2",
     "typedoc": "^0.14.2",
-    "typescript": "^3.4.5"
+    "typescript": "^3.2.4"
   },
   "config": {
     "commitizen": {
