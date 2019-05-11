@@ -1,9 +1,11 @@
 import { NativeModules } from 'react-native';
 
-const { RNWebImageLoader } = NativeModules;
-
-interface Spec {
+interface Interface {
   readonly clearCache: (expiredOnly?: boolean) => Promise<null>;
   readonly getDiskSize: () => Promise<number>;
 }
-export default RNWebImageLoader as Spec;
+
+const { RNWebImageLoader } = NativeModules;
+const loader: Interface = RNWebImageLoader;
+
+export default loader;
