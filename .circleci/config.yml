@@ -52,6 +52,12 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+      - run:
+          name: setup git email
+          command: git config --global user.email "ericlewis777@gmail.com"
+      - run:
+          name: setup git username
+          command: git config --global user.name "ericlewis"
       - run: yarn prepare-release
       - run: yarn semantic-release
 
