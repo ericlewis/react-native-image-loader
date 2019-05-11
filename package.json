@@ -1,6 +1,6 @@
 {
   "name": "react-native-image-loader",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "Use SDWebImage inside the react-native Image pipeline!",
   "author": "Eric Lewis",
   "main": "build/main/index.js",
@@ -33,11 +33,11 @@
     "doc:html": "typedoc src/ --exclude **/*.spec.ts --target ES6 --mode file --out build/docs",
     "doc:json": "typedoc src/ --exclude **/*.spec.ts --target ES6 --mode file --json build/docs/typedoc.json",
     "doc:publish": "gh-pages -m \"[ci skip] Updates\" -d build/docs",
-    "version": "standard-version",
     "reset": "git clean -dfx && git reset --hard && npm i",
     "clean": "trash build test",
     "all": "run-s reset test cov:check doc:html",
-    "prepare-release": "run-s all version doc:publish"
+    "semantic-release": "run-s all semantic-release doc:publish",
+    "preinstall": "node -e \"if(process.env.npm_execpath.indexOf('yarn') === -1) throw new Error('react-native-image-loader must be installed with Yarn: https://yarnpkg.com/')\""
   },
   "scripts-info": {
     "info": "Display information about the package scripts",
@@ -64,13 +64,13 @@
     "nyc": "^14.1.1",
     "opn-cli": "^4.1.0",
     "prettier": "^1.17.0",
-    "standard-version": "^6.0.1",
     "trash-cli": "^1.4.0",
     "tslint": "^5.16.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-immutable": "^5.5.2",
     "typedoc": "^0.14.2",
-    "typescript": "^3.4.5"
+    "typescript": "^3.4.5",
+    "semantic-release": "^15.13.12"
   },
   "ava": {
     "failFast": true,

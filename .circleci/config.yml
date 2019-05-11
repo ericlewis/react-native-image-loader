@@ -1,10 +1,10 @@
 # https://circleci.com/docs/2.0/language-javascript/
 version: 2
 jobs:
-  'node-10':
+  'test_node_10':
     docker:
       - image: circleci/node:10
-    working_directory: ~/typescript-starter
+    working_directory: ~/lib
     steps:
       - checkout
       # Download and cache dependencies
@@ -13,36 +13,59 @@ jobs:
             - v1-dependencies-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
-      - run: npm install
+      - run: yarn
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-      - run: npm test
+      - run: yarn test
       - run: npx nyc report --reporter=lcov | npx codecov
-      - run: npm run cov:check
-  'node-latest':
+      - run: yarn run cov:check
+  'test_node_latest':
     docker:
       - image: circleci/node:latest
-    working_directory: ~/typescript-starter
+    working_directory: ~/lib
     steps:
       - checkout
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
-      - run: npm install
+      - run: yarn
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-      - run: npm test
+      - run: yarn test
       - run: npx nyc report --reporter=lcov | npx codecov
-      - run: npm run cov:check
+      - run: yarn run cov:check
+  'release':
+    docker:
+      - image: circleci/node:10
+    working_directory: ~/lib
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run: yarn
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - run: yarn build
+      - run: yarn semantic-release
 
 workflows:
   version: 2
-  build:
+  test_and_release:
     jobs:
-      - 'node-10'
-      - 'node-latest'
+      - test_node_10
+      - test_node_latest
+      - release:
+          requires:
+            - test_node_10
+            - test_node_latest
