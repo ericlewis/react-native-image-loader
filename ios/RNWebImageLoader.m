@@ -15,6 +15,7 @@
 
 #import <SDWebImage/SDWebImageManager.h>
 #import <SDWebImage/SDImageCodersManager.h>
+#import <SDWebImage/SDImageCache.h>
 
 @implementation RNWebImageLoader
 
@@ -88,6 +89,24 @@ RCT_EXPORT_MODULE()
 {
   NSString *scheme = [requestURL scheme];
   return [scheme isEqualToString:@"http"] || [scheme isEqualToString:@"https"];
+}
+
+
+RCT_EXPORT_METHOD(clearCache:(BOOL)expiredOnly
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(__unused RCTPromiseResolveBlock)reject)
+{
+  SDImageCache *cache = (SDImageCache *)SDWebImageManager.sharedManager.imageCache;
+  
+  if (expiredOnly) {
+    [cache deleteOldFilesWithCompletionBlock:^{
+      resolve(nil);
+    }];
+  } else {
+    [cache clearDiskOnCompletion:^{
+      resolve(nil);
+    }];
+  }
 }
 
 @end
