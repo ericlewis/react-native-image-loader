@@ -30,8 +30,7 @@
     "reset": "git clean -dfx && git reset --hard && npm i",
     "clean": "trash build test",
     "all": "run-s reset test doc:html",
-    "semantic-release": "run-s all semantic-release doc:publish",
-    "preinstall": "node -e \"if(process.env.npm_execpath.indexOf('yarn') === -1) throw new Error('react-native-image-loader must be installed with Yarn: https://yarnpkg.com/')\""
+    "semantic-release": "run-s all semantic-release doc:publish"
   },
   "scripts-info": {
     "info": "Display information about the package scripts",
