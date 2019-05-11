@@ -27,9 +27,11 @@
     "doc:html": "typedoc src/ --exclude **/*.spec.ts --target ES6 --mode file --out build/docs",
     "doc:json": "typedoc src/ --exclude **/*.spec.ts --target ES6 --mode file --json build/docs/typedoc.json",
     "doc:publish": "gh-pages -m \"[ci skip] Updates\" -d build/docs",
-    "reset": "git clean -dfx && git reset --hard && npm i",
+    "reset": "git clean -dfx && git reset --hard && yarn",
     "clean": "trash build test",
-    "semantic-release": "run-s reset build doc:html semantic-release doc:publish"
+    "all": "run-s reset test doc:html",
+    "prepare-release": "run-s all doc:publish",
+    "semantic-release": "semantic-release"
   },
   "scripts-info": {
     "info": "Display information about the package scripts",
@@ -39,8 +41,7 @@
     "doc": "Generate HTML API documentation and open it in a browser",
     "doc:json": "Generate API documentation in typedoc JSON format",
     "version": "Bump package.json version, update CHANGELOG.md, tag release",
-    "reset": "Delete all untracked files and reset the repo to the last commit",
-    "semantic-release": "One-step: clean, build, test, publish docs, and prep a release"
+    "reset": "Delete all untracked files and reset the repo to the last commit"
   },
   "peerDependencies": {
     "react-native": "*"
@@ -58,7 +59,7 @@
     "tslint": "^5.16.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-immutable": "^5.5.2",
-    "typedoc": "^0.13.0",
+    "typedoc": "^0.14.2",
     "typescript": "^3.2.4"
   },
   "config": {
