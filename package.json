@@ -1,5 +1,5 @@
 {
-  "name": "react-native-image-loader",
+  "name": "react-native-image-loader-plugin",
   "version": "0.0.0-development",
   "description": "Use SDWebImage inside the react-native Image pipeline!",
   "author": "Eric Lewis",
