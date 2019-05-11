@@ -64,13 +64,13 @@ jobs:
 workflows:
   version: 2
   test_and_release:
+    branches:
+      only:
+        - master
     jobs:
       - test_node_10
       - test_node_latest
       - release:
-          branches:
-            only:
-              - master
           requires:
             - test_node_10
             - test_node_latest
