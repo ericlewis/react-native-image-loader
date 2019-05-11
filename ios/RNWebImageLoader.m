@@ -14,6 +14,7 @@
 #endif
 
 #import <SDWebImage/SDWebImageManager.h>
+#import <SDWebImage/SDImageCodersManager.h>
 
 @implementation RNWebImageLoader
 
@@ -21,13 +22,34 @@ RCT_EXPORT_MODULE()
 
 - (BOOL)canLoadImageURL:(NSURL *)requestURL
 {
+  // Don't mess with local url's for now
+  if (RCTIsLocalAssetURL(requestURL)) {
+    return NO;
+  }
+  
   NSString *scheme = [requestURL scheme];
   BOOL isWebURL = [scheme isEqualToString:@"http"] || [scheme isEqualToString:@"https"];
   
-  NSString *extension = [requestURL pathExtension];
-  BOOL isImageURL = [extension isEqualToString:@"gif"] || [extension isEqualToString:@"png"] || [extension isEqualToString:@"jpg"] || [extension isEqualToString:@"jpeg"];
+  NSString *extension = [[requestURL pathExtension] lowercaseString];
+  __block BOOL isImageURL = [extension isEqualToString:@"png"] || [extension isEqualToString:@"jpg"] || [extension isEqualToString:@"jpeg"] || [extension isEqualToString:@"tiff"];
   
-  return !RCTIsLocalAssetURL(requestURL) && isWebURL && isImageURL;
+  // By default, we handle jpeg, png & tiff.
+  if (isWebURL && isImageURL) {
+    return true;
+  }
+  
+  // Check the codec list for any extra extensions, like GIF, APNG, etc.
+  // The theory here is image coders following a naming convention
+  // TODO: don't loop this every time, these don't really change.
+  [SDImageCodersManager.sharedManager.coders enumerateObjectsUsingBlock:^(id<SDImageCoder>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    NSString *className = NSStringFromClass(obj.class);
+    if ([className isEqualToString:[NSString stringWithFormat:@"SDImage%@Coder", [extension uppercaseString]]]) {
+      isImageURL = YES;
+      *stop = YES;
+    }
+  }];
+  
+  return isWebURL && isImageURL;
 }
 
 - (RCTImageLoaderCancellationBlock)loadImageForURL:(NSURL *)imageURL
