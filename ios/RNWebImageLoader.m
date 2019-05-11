@@ -21,6 +21,26 @@
 
 RCT_EXPORT_MODULE()
 
+- (instancetype)init
+{
+  if (self = [super init]) {
+    [SDImageCache.sharedImageCache.config setShouldCacheImagesInMemory:YES];
+    [SDImageCache.sharedImageCache.config setMaxMemoryCost:1024 * 1024 * 20];
+  }
+  
+  return self;
+}
+
+- (BOOL)requiresScheduling
+{
+  return NO;
+}
+
+- (BOOL)shouldCacheLoadedImages
+{
+  return NO;
+}
+
 - (BOOL)canLoadImageURL:(NSURL *)requestURL
 {
   // Don't mess with local url's for now
@@ -39,13 +59,12 @@ RCT_EXPORT_MODULE()
                                 partialLoadHandler:(RCTImageLoaderPartialLoadBlock)partialLoadHandler
                                  completionHandler:(RCTImageLoaderCompletionBlock)completionHandler
 {
-  
   SDWebImageCombinedOperation *operation = [SDWebImageManager.sharedManager loadImageWithURL:imageURL options:SDWebImageProgressiveLoad context:nil progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * __unused _Nullable targetURL) {
     if (progressHandler) {
       progressHandler(receivedSize, expectedSize);
     }
   } completed:^(UIImage * _Nullable image, NSData * __unused _Nullable data, NSError * _Nullable error, SDImageCacheType __unused cacheType, BOOL finished, NSURL * __unused _Nullable imgURL) {
-    if (finished) {
+    if (finished && completionHandler) {
       completionHandler(error, image);
     } else if (partialLoadHandler) {
       partialLoadHandler(image);
