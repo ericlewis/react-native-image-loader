@@ -39,6 +39,9 @@ jobs:
     docker:
       - image: circleci/node:10
     working_directory: ~/lib
+    branches:
+      only:
+        - master
     steps:
       - checkout
       # Download and cache dependencies
@@ -64,9 +67,6 @@ jobs:
 workflows:
   version: 2
   test_and_release:
-    branches:
-      only:
-        - master
     jobs:
       - test_node_10
       - test_node_latest
