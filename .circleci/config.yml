@@ -68,6 +68,9 @@ workflows:
       - test_node_10
       - test_node_latest
       - release:
+          branches:
+            only:
+              - master
           requires:
             - test_node_10
             - test_node_latest
