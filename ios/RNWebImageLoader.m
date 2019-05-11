@@ -23,33 +23,11 @@ RCT_EXPORT_MODULE()
 - (BOOL)canLoadImageURL:(NSURL *)requestURL
 {
   // Don't mess with local url's for now
-  if (RCTIsLocalAssetURL(requestURL)) {
+  if (RCTIsLocalAssetURL(requestURL) || ![self isWebURL:requestURL]) {
     return NO;
   }
   
-  NSString *scheme = [requestURL scheme];
-  BOOL isWebURL = [scheme isEqualToString:@"http"] || [scheme isEqualToString:@"https"];
-  
-  NSString *extension = [[requestURL pathExtension] lowercaseString];
-  __block BOOL isImageURL = [extension isEqualToString:@"png"] || [extension isEqualToString:@"jpg"] || [extension isEqualToString:@"jpeg"] || [extension isEqualToString:@"tiff"];
-  
-  // By default, we handle jpeg, png & tiff.
-  if (isWebURL && isImageURL) {
-    return true;
-  }
-  
-  // Check the codec list for any extra extensions, like GIF, APNG, etc.
-  // The theory here is image coders following a naming convention
-  // TODO: don't loop this every time, these don't really change.
-  [SDImageCodersManager.sharedManager.coders enumerateObjectsUsingBlock:^(id<SDImageCoder>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-    NSString *className = NSStringFromClass(obj.class);
-    if ([className isEqualToString:[NSString stringWithFormat:@"SDImage%@Coder", [extension uppercaseString]]]) {
-      isImageURL = YES;
-      *stop = YES;
-    }
-  }];
-  
-  return isWebURL && isImageURL;
+  return [self hasDefaultCoder:requestURL] || [self hasExtendedCoder:requestURL];
 }
 
 - (RCTImageLoaderCancellationBlock)loadImageForURL:(NSURL *)imageURL
@@ -61,8 +39,7 @@ RCT_EXPORT_MODULE()
                                  completionHandler:(RCTImageLoaderCompletionBlock)completionHandler
 {
   
-  SDWebImageManager *manager = [SDWebImageManager sharedManager];
-  SDWebImageCombinedOperation *operation = [manager loadImageWithURL:imageURL options:SDWebImageProgressiveLoad context:nil progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * __unused _Nullable targetURL) {
+  SDWebImageCombinedOperation *operation = [SDWebImageManager.sharedManager loadImageWithURL:imageURL options:SDWebImageProgressiveLoad context:nil progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * __unused _Nullable targetURL) {
     if (progressHandler) {
       progressHandler(receivedSize, expectedSize);
     }
@@ -81,5 +58,36 @@ RCT_EXPORT_MODULE()
   return cancellationBlock;
 }
 
+- (BOOL)hasDefaultCoder:(NSURL *)requestURL
+{
+  NSString *extension = [[requestURL pathExtension] uppercaseString];
+  return [extension isEqualToString:@"PNG"] || [extension isEqualToString:@"JPG"] || [extension isEqualToString:@"JPEG"] || [extension isEqualToString:@"TIFF"];
+}
+
+- (BOOL)hasExtendedCoder:(NSURL *)requestURL
+{
+  NSString *extension = [[requestURL pathExtension] uppercaseString];
+  
+  __block BOOL isImageURL = NO;
+  
+  // Check the codec list for any extra extensions, like GIF, APNG, etc.
+  // The theory here is image coders following a naming convention
+  // TODO: don't loop this every time, these don't really change.
+  [SDImageCodersManager.sharedManager.coders enumerateObjectsUsingBlock:^(id<SDImageCoder>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    NSString *className = NSStringFromClass(obj.class);
+    if ([className isEqualToString:[NSString stringWithFormat:@"SDImage%@Coder", extension]]) {
+      isImageURL = YES;
+      *stop = YES;
+    }
+  }];
+  
+  return isImageURL;
+}
+
+- (BOOL)isWebURL:(NSURL *)requestURL
+{
+  NSString *scheme = [requestURL scheme];
+  return [scheme isEqualToString:@"http"] || [scheme isEqualToString:@"https"];
+}
 
 @end
