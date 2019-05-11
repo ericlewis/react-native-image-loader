@@ -11,6 +11,6 @@
 #import <React/RCTImageLoader.h>
 #endif
 
-@interface RNWebImageLoader : NSObject <RCTImageLoader>
+@interface RNWebImageLoader : NSObject <RCTImageURLLoader>
 
 @end
