@@ -5,11 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#if __has_include("RCTImageLoader.h")
-#import "RCTImageLoader.h"
-#else
 #import <React/RCTImageLoader.h>
-#endif
 
 @interface RNWebImageLoader : NSObject <RCTImageURLLoader>
 

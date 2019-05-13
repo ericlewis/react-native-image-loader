@@ -7,11 +7,7 @@
 
 #import "RNWebImageLoader.h"
 
-#if __has_include("RCTUtils.h")
-#import "RCTUtils.h"
-#else
 #import <React/RCTUtils.h>
-#endif
 
 #import <SDWebImage/SDWebImageManager.h>
 #import <SDWebImage/SDImageCodersManager.h>
