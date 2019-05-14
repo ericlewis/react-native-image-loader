@@ -65,12 +65,15 @@
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
 				<h1 id="react-native-image-loader-plugin">react-native-image-loader-plugin</h1>
+				<p>This is a proof-of-concept approach for improving React Native&#39;s Image component - currently <strong>iOS only</strong>.
+				Once added, react-native will start using SDWebImage&#39;s decoders, caches, and network capabilities!</p>
+				<p>This can lead to better performances in Image-heavy react-native apps, you can check some early benchmarks over on this <a href="https://twitter.com/ericlewis/status/1127447416674947072">twitter thread</a>.</p>
 				<h2 id="getting-started">Getting started</h2>
-				<p><code>$ yarn add react-native-image-loader-plugin</code>
+				<p><code>yarn add react-native-image-loader-plugin</code>
 					or
-				<code>$ npm install react-native-image-loader-plugin --save</code></p>
+				<code>npm install react-native-image-loader-plugin --save</code></p>
 				<h3 id="mostly-automatic-installation">Mostly automatic installation</h3>
-				<p><code>$ react-native link react-native-image-loader-plugin</code></p>
+				<p><code>react-native link react-native-image-loader-plugin</code></p>
 				<h3 id="manual-installation">Manual installation</h3>
 				<h4 id="ios">iOS</h4>
 				<ol>
@@ -79,8 +82,6 @@
 					<li>In XCode, in the project navigator, select your project. Add <code>libRNWebImageLoader.a</code> to your project&#39;s <code>Build Phases</code> ➜ <code>Link Binary With Libraries</code></li>
 					<li>Run your project (<code>Cmd+R</code>)&lt;</li>
 				</ol>
-				<h2 id="usage">Usage</h2>
-				<p>Nothing! As long as you have it added, react-native will start using SDWebImage&#39;s decoders, caches, and network capabilities!</p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
