@@ -54,7 +54,7 @@
     "opn-cli": "^4.1.0",
     "prettier": "^1.17.0",
     "react-native": "^0.59.8",
-    "semantic-release": "^15.13.12",
+    "semantic-release": "^17.2.3",
     "trash-cli": "^1.4.0",
     "tslint": "^5.16.0",
     "tslint-config-prettier": "^1.18.0",
